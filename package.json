@@ -1,0 +1,19 @@
+{
+  "name": "hardhat-project",
+  "scripts": {
+    "pre:compile": "npm run clean && mkdir -p tmp",
+    "compile": "mkdir -p tmp && $HOME/.zokrates/bin/zokrates compile --debug -c bn128 -i ./example.zok -s tmp/abi.json -o tmp/out -r tmp/out.r1cs --stdlib-path $HOME/.zokrates/stdlib",
+    "setup": "$HOME/.zokrates/bin/zokrates setup -i tmp/out -p tmp/proving.key -v tmp/verification.key",
+    "compute": "$HOME/.zokrates/bin/zokrates compute-witness -s tmp/abi.json -a 5 4 -i tmp/out -o tmp/witness --circom-witness tmp/out.wtns",
+    "generate-proof": "$HOME/.zokrates/bin/zokrates generate-proof -i tmp/out -p tmp/proving.key -j proof.json -w tmp/witness",
+    "verify": "$HOME/.zokrates/bin/zokrates verify",
+    "export-verifier": "$HOME/.zokrates/bin/zokrates export-verifier -i tmp/verification.key -o contracts/Verifier.sol",
+    "clean": "rm -rf tmp && rm -rf contracts/Verifier.sol",
+    "test": "npm run compile && npm run setup && npm run compute && npm run generate-proof && npm run verify"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "hardhat": "^2.18.3"
+  }
+}

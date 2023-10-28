@@ -1,0 +1,4 @@
+def main(private field amount, field threshold) {
+    assert(amount >= threshold);
+    return;
+}
